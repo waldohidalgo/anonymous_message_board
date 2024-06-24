@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Anonymous Message Board</title>
+    <meta name="description" content="freeCodeCamp project boilerplate" />
+    <link
+      id="favicon"
+      rel="icon"
+      href="/public/images/favicon.ico"
+      type="image/x-icon"
+    />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/public/css/style.css" />
+    <link rel="stylesheet" href="/public/css/thread.css" />
+    <link rel="stylesheet" href="/public/css/footer/styles.css" />
+  </head>
+  <body>
+    <header class="py-5">
+      <h1 id="threadTitle" class="text-center mb-0 fw-bolder"></h1>
+      <p class="text-center mt-3">
+        The name of this thread is
+        <span id="threadName" class="fw-bold"></span>
+      </p>
+      <p class="text-center">
+        The id of this thread is <span id="threadId" class="fw-bold"></span>
+      </p>
+    </header>
+    <br />
+
+    <div id="boardDisplay"></div>
+
+    <hr style="margin: 50px; margin-top: 200px" />
+    <!-- Your web-app is https, so your scripts need to be too -->
+    <script
+      src="https://code.jquery.com/jquery-2.2.1.min.js"
+      integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $(function () {
+        var currentURL = window.location.pathname.slice(3);
+        currentURL = currentURL.split("/");
+
+        var url =
+          "/api/replies/" + currentURL[0] + "?thread_id=" + currentURL[1];
+        $("#threadTitle").text(window.location.pathname);
+        $("#threadName").text(currentURL[0]);
+        $("#threadId").text(currentURL[1]);
+
+        $.ajax({
+          type: "GET",
+          url: url,
+          success: function (ele) {
+            var boardThreads = [];
+            //
+            // THIS ARRAY SET UP IS FOR CODE READABILITIES AND TESTING!
+            // THIS IS NOT WHAT IT WOULD LOOK LIKE TO GO LIVE
+            //
+            console.log(ele); //can I use typeScript please?!
+            var thread = ['<div class="thread">'];
+            thread.push('<div class="main">');
+            thread.push(
+              '<p class="id">id: ' + ele._id + " (" + ele.created_on + ")</p>"
+            );
+            thread.push(
+              '<form id="reportThread"><input type="hidden" name="report_id" value="' +
+                ele._id +
+                '"><button type="submit" class="btn btn-primary">Report</button></form>'
+            );
+            thread.push(
+              '<form id="deleteThread" class="d-flex justify-content-center"><input type="hidden" value="' +
+                ele._id +
+                '" name="thread_id" required><input type="text" placeholder="password" name="delete_password" required><button type="submit" class="btn btn-primary ms-1">Delete</button></form>'
+            );
+            thread.push(
+              "<h3 class='text-center'> Thread Text: " +
+                ele.text +
+                "</h3><p class='text-center'>Below are the replies:</p>"
+            );
+            thread.push('</div><div class="replies">');
+            ele.replies.forEach(function (rep) {
+              thread.push('<div class="reply border border-dark">');
+              thread.push(
+                '<p class="id mb-0">id: ' +
+                  rep._id +
+                  " (" +
+                  rep.created_on +
+                  ")</p>"
+              );
+              thread.push(
+                "<p class='text-center fw-bold'>Reply Text: " +
+                  rep.text +
+                  "</p>"
+              );
+              thread.push(
+                '<form id="reportReply"><input type="hidden" name="thread_id" value="' +
+                  ele._id +
+                  '"><input type="hidden" name="reply_id" value="' +
+                  rep._id +
+                  '"><button type="submit" class="btn btn-primary">Report</button></form>'
+              );
+              thread.push(
+                '<form id="deleteReply" class="d-flex justify-content-center"><input type="hidden" value="' +
+                  ele._id +
+                  '" name="thread_id" required=""><input type="hidden" value="' +
+                  rep._id +
+                  '" name="reply_id" required=""><input type="text" placeholder="password" name="delete_password" required=""><button type="submit" class="btn btn-primary ms-1">Delete</button></form>'
+              );
+
+              thread.push("</div>");
+            });
+            thread.push('<div class="newReply">');
+            thread.push('<form  id="newReply" >');
+            thread.push(
+              '<input type="hidden" name="thread_id" value="' + ele._id + '">'
+            );
+            thread.push(
+              '<textarea class="w-100" rows="5" type="text" placeholder="Quick reply..." name="text" required></textarea><br>'
+            );
+            thread.push(
+              '<div class="d-flex justify-content-center"><input type="text" placeholder="password to delete" name="delete_password" required=""><button type="submit" class="btn btn-success ms-1">Submit</button></div>'
+            );
+            thread.push("</form></div></div></div>");
+            boardThreads.push(thread.join(""));
+            $("#boardDisplay").html(boardThreads.join(""));
+          },
+        });
+
+        $("#newThread").submit(function () {
+          $(this).attr("action", "/api/threads/" + currentBoard);
+        });
+        $("#boardDisplay").on("submit", "#newReply", function (e) {
+          var url = "/api/replies/" + currentURL[0];
+          $.ajax({
+            type: "POST",
+            url: url,
+            data: $(this).serialize(),
+            success: function (data) {
+              location.reload();
+            },
+          });
+          e.preventDefault();
+        });
+
+        $("#boardDisplay").on("submit", "#reportThread", function (e) {
+          var url = "/api/threads/" + currentURL[0];
+          $.ajax({
+            type: "PUT",
+            url: url,
+            data: $(this).serialize(),
+            success: function (data) {
+              alert(data);
+            },
+          });
+          e.preventDefault();
+        });
+        $("#boardDisplay").on("submit", "#reportReply", function (e) {
+          var url = "/api/replies/" + currentURL[0];
+          $.ajax({
+            type: "PUT",
+            url: url,
+            data: $(this).serialize(),
+            success: function (data) {
+              alert(data);
+              location.reload();
+            },
+          });
+          e.preventDefault();
+        });
+        $("#boardDisplay").on("submit", "#deleteThread", function (e) {
+          var url = "/api/threads/" + currentURL[0];
+          $.ajax({
+            type: "DELETE",
+            url: url,
+            data: $(this).serialize(),
+            success: function (data) {
+              alert(data);
+              location.reload();
+            },
+          });
+          e.preventDefault();
+        });
+        $("#boardDisplay").on("submit", "#deleteReply", function (e) {
+          var url = "/api/replies/" + currentURL[0];
+          $.ajax({
+            type: "DELETE",
+            url: url,
+            data: $(this).serialize(),
+            success: function (data) {
+              alert(data);
+              location.reload();
+            },
+          });
+          e.preventDefault();
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+:root {
+  --font-titulo: "Times New Roman", Times, serif;
+}
+
+* {
+  margin: 0px;
+  padding: 0px;
+}
+header {
+  background-color: #ffefaf;
+}
+h1 {
+  font-family: var(--font-titulo);
+}
+
+.reply {
+  margin: 1rem 5px;
+  padding: 5px;
+  background-color: #ffefaf;
+}
+
+.newReply {
+  margin: 10px 5px 10px 5px;
+  background-color: #eee;
+  border: 1px solid black;
+}
+
+.thread {
+  border: 2px solid black;
+  padding: 5px;
+  margin-bottom: 5px;
+  max-width: 500px;
+  margin-inline: auto;
+}
+
+.id {
+  font-size: 10.5px;
+}
+
+form {
+  max-width: 500px;
+  margin: 0 auto;
+  border: 1px solid black;
+  padding: 1rem;
+}
+textarea {
+  resize: none;
+}
