@@ -28,16 +28,46 @@
       </h1>
     </header>
     <main class="py-3">
-      <p class="text-center">
-        Go to testing page (General Board):
-        <a href="/b/general/">
-          <button class="btn btn-primary">
-            <span class="fw-bold">/b/general/</span>
-            board
-          </button>
-        </a>
-      </p>
-      <div id="testui" class="bg-light">
+      <section class="text-center">
+        <h2 class="text-center text-decoration-underline">
+          Usage Instructions
+        </h2>
+        <p>
+          There are two APIs created with both HTTP methods: GET, POST, PUT and
+          DELETE. The <strong>first API</strong> allows you to manipulate the
+          board and its threads at the following path (the board name is entered
+          in the path):
+        </p>
+        <p><code>/api/threads/:board</code></p>
+        <p class="text-center">
+          For example, the next button will take you to the general board:
+          <a href="/b/general/">
+            <button class="btn btn-primary">
+              <span class="fw-bold">/b/general/</span>
+              board
+            </button>
+          </a>
+        </p>
+        <p>
+          A GET request to the next path
+          <code>/api/threads/:board</code> with the name of the board returns an
+          array of the most recent 10 bumped threads on the board with only the
+          most recent 3 replies for each.
+        </p>
+        <p>
+          The <strong>second API</strong> allows you to manipulate the replies
+          to each thread at the following path:
+        </p>
+        <p><code>/api/replies/:board</code></p>
+        <p>
+          A GET request to the next path
+          <code>/api/replies/{board}?thread_id={thread_id}</code> returns the
+          entire thread with all its replies, excluding the reported and
+          delete_password fields.
+        </p>
+      </section>
+
+      <section id="testui" class="bg-light">
         <h2 class="text-center">API Tests:</h2>
         <p class="text-center">
           The following forms are available to test the application:
@@ -95,17 +125,6 @@
 
             <h4 class="text-center">Report thread (PUT /api/threads/:board)</h4>
             <form id="reportThread">
-              <!-- <div class="mb-3">
-                <label for="board2" class="form-label fw-bold">Board</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="board"
-                  id="board2"
-                  name="board"
-                  required
-                />
-              </div> -->
               <div class="mb-3">
                 <label for="id_to_report2" class="form-label fw-bold"
                   >Thread ID to Report</label
@@ -297,7 +316,7 @@
             </form>
           </div>
         </section>
-      </div>
+      </section>
     </main>
     <footer class="footer" translate="no">
       <div class="footer_contenido">

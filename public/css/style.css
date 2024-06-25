@@ -46,3 +46,8 @@ form {
 textarea {
   resize: none;
 }
+code {
+  background-color: #eee;
+  color: red;
+  font-weight: 700;
+}

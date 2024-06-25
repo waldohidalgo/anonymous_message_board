@@ -26,8 +26,8 @@
     <header class="py-5">
       <h1 id="threadTitle" class="text-center mb-0 fw-bolder"></h1>
       <p class="text-center mt-3">
-        The name of this thread is
-        <span id="threadName" class="fw-bold"></span>
+        The name of this board is
+        <span id="boardName" class="fw-bold"></span>
       </p>
       <p class="text-center">
         The id of this thread is <span id="threadId" class="fw-bold"></span>
@@ -37,7 +37,21 @@
 
     <div id="boardDisplay"></div>
 
-    <hr style="margin: 50px; margin-top: 200px" />
+    <footer class="footer" translate="no">
+      <div class="footer_contenido">
+        <div translate="no" id="footer_tag">Developed by:</div>
+
+        <div class="logo">
+          <a
+            href="https://linktr.ee/waldohidalgo"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src="/public/images/logo_waldo.png" alt="logo waldo" />
+          </a>
+        </div>
+      </div>
+    </footer>
     <!-- Your web-app is https, so your scripts need to be too -->
     <script
       src="https://code.jquery.com/jquery-2.2.1.min.js"
@@ -52,7 +66,7 @@
         var url =
           "/api/replies/" + currentURL[0] + "?thread_id=" + currentURL[1];
         $("#threadTitle").text(window.location.pathname);
-        $("#threadName").text(currentURL[0]);
+        $("#boardName").text(currentURL[0]);
         $("#threadId").text(currentURL[1]);
 
         $.ajax({
