@@ -59,6 +59,10 @@ El proyecto lo he desplegado en mi cuenta gratuita en Render el cual tarda al me
 
 ![Imagen de Tests funcionales aprobados](./screenshots/tests_funcionales_aprobados.jpg)
 
+Tests funcionales aprobados en Render:
+
+![Imagen de Tests funcionales aprobados en Render](./screenshots/tests_funcionales_aprobados_en_render.jpg)
+
 ## Tests Funcionales Creados
 
 ### 1. Creating a new thread: POST request to /api/threads/{board}

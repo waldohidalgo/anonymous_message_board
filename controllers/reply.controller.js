@@ -72,23 +72,26 @@ module.exports = function (router) {
     //Returned will be the string incorrect password or success. On success, the text of the reply_id will be changed to [deleted].
 
     try {
-      const updatedDocument = await threadsCollection.findOneAndUpdate(
+      const updatedDocument = await threadsCollection.updateOne(
         {
           _id: new ObjectId(String(thread_id)),
-          "replies._id": new ObjectId(String(reply_id)),
-          "replies.delete_password": delete_password,
         },
         {
           $set: {
-            "replies.$.text": "[deleted]",
+            "replies.$[reply].text": "[deleted]",
           },
         },
         {
-          returnDocument: "after",
+          arrayFilters: [
+            {
+              "reply._id": new ObjectId(String(reply_id)),
+              "reply.delete_password": delete_password,
+            },
+          ],
         }
       );
 
-      if (updatedDocument) {
+      if (updatedDocument.modifiedCount === 1) {
         res.send("success");
         return;
       } else {
